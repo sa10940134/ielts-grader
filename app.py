@@ -11,7 +11,7 @@ st.set_page_config(page_title="雅思寫作批改系統", layout="wide")
 st.title("✍️ 雅思寫作 Task 2 智能出題與批改系統")
 
 # 使用免費額度充裕且穩定的模型
-MODEL_NAME = "gemini-2.0-flash"
+MODEL_NAME = "gemini-3.8-flash"
 
 # ===========================
 # 0. 資料庫設定
