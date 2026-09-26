@@ -142,8 +142,7 @@ if "question" not in st.session_state:
 if st.button("🎲 隨機產生雅思 Task 2 題目"):
     with st.spinner("正在產生題目..."):
         try:
-res = client.models.generate_content(
-    model="gemini-3.8-flash",
+            res = client.models.generate_content(model="gemini-3.8-flash",
     contents="請隨機產生一道雅思寫作 Task 2 題目，只需輸出英文題目本身，不需要任何引言或問候語。",
 )
             st.session_state.question = res.text.strip()
