@@ -1,3 +1,11 @@
+from datetime import date, datetime
+import json
+import sqlite3
+import time  # 加上這個
+from google import genai
+from google.genai import types
+from google.genai.errors import APIError  # 捕捉官方 API 異常
+import streamlit as st
 import streamlit as st
 from google import genai
 from google.genai import types
