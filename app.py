@@ -265,4 +265,4 @@ if st.button("🚀 開始批改與評分", disabled=submit_disabled):
             except json.JSONDecodeError:
                 st.error("模型輸出格式非合法 JSON，請再點擊一次重試！")
             except Exception as e:
-                st.error(f"批改過程發生錯誤：{str(e)}")幫我用以上程式碼修改
+                st.error(f"批改過程發生錯誤：{str(e)}")
