@@ -84,7 +84,27 @@ def increment_usage(student_id: str):
         conn.commit()
 
 init_db()
+def generate_with_retry(client, **kwargs):
+  """遇到 503 或伺服器過載時，自動重試最多 3 次"""
+  max_retries = 3
+  delay = 2.0  # 初始等待 2 秒
 
+  for attempt in range(max_retries):
+    try:
+      return client.models.generate_content(**kwargs)
+    except APIError as e:
+      # 捕捉 503 (UNAVAILABLE) 或 429 (RESOURCE_EXHAUSTED)
+      if e.code in [503, 429] and attempt < max_retries - 1:
+        time.sleep(delay)
+        delay *= 2  # 指數退避：2s -> 4s
+        continue
+      raise e
+    except Exception as e:
+      if "503" in str(e) and attempt < max_retries - 1:
+        time.sleep(delay)
+        delay *= 2
+        continue
+      raise e
 # ===========================
 # 1. 驗證與側邊欄
 # ===========================
@@ -150,8 +170,10 @@ if "question" not in st.session_state:
 if st.button("🎲 隨機產生雅思 Task 2 題目"):
     with st.spinner("正在產生題目..."):
         try:
-            res = client.models.generate_content(model="gemini-3.8-flash",
-    contents="請隨機產生一道雅思寫作 Task 2 題目，只需輸出英文題目本身，不需要任何引言或問候語。",
+            res = generate_with_retry(
+    client,
+    model="gemini-3.8-flash",
+    contents="請隨機產生一道雅思寫作 Task 2 題目，只需輸出英文題目本身，不需要任何引言或問候語。"
 )
             st.session_state.question = res.text.strip()
             st.rerun()
@@ -200,14 +222,14 @@ if st.button("🚀 開始批改與評分", disabled=submit_disabled):
             
             try:
                 # 使用 response_mime_type 強制原生 JSON 模式
-                response = client.models.generate_content(
-                    model="gemini-3.8-flash",
-                    contents=grading_prompt,
-                    config=types.GenerateContentConfig(
-                        response_mime_type="application/json",
-                        temperature=0.2
-                    )
-                )
+                response = generate_with_retry(client,
+    model="gemini-3.8-flash",
+    contents=grading_prompt,
+    config=types.GenerateContentConfig(
+        response_mime_type="application/json",
+        temperature=0.2
+    )
+)
                 
                 result = json.loads(response.text)
 
