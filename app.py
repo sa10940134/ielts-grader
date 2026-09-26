@@ -142,10 +142,10 @@ if "question" not in st.session_state:
 if st.button("🎲 隨機產生雅思 Task 2 題目"):
     with st.spinner("正在產生題目..."):
         try:
-            res = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents="請隨機產生一道雅思寫作 Task 2 題目，只需輸出英文題目本身，不需要任何引言或問候語。"
-            )
+res = client.models.generate_content(
+    model="gemini-3.8-flash",
+    contents="請隨機產生一道雅思寫作 Task 2 題目，只需輸出英文題目本身，不需要任何引言或問候語。",
+)
             st.session_state.question = res.text.strip()
             st.rerun()
         except Exception as e:
@@ -194,7 +194,7 @@ if st.button("🚀 開始批改與評分", disabled=submit_disabled):
             try:
                 # 使用 response_mime_type 強制原生 JSON 模式
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-3.8-flash",
                     contents=grading_prompt,
                     config=types.GenerateContentConfig(
                         response_mime_type="application/json",
