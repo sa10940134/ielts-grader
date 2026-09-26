@@ -12,8 +12,7 @@ import streamlit as st
 st.set_page_config(page_title="雅思寫作雙任務批改系統", layout="wide")
 st.title("✍️ 雅思寫作 Task 1 & Task 2 智能出題與全套批改系統")
 
-MODEL_NAME = "gemini-3.8-flash"
-
+MODEL_NAME = "gemini-2.0-flash"
 # ===========================
 # 0. 資料庫設定
 # ===========================
