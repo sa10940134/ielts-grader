@@ -4,7 +4,7 @@ import sqlite3
 import time
 from google import genai
 from google.genai import types
-from google.genai.errors import APIError  # 捕捉官方 API 異常
+from google.genai.errors import APIError
 import streamlit as st
 import streamlit as st
 from google import genai
